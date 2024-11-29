@@ -1,0 +1,4 @@
+CompileFlags:
+  Add: [-I/Users/sangshin/.brew/opt/sdl2/include/SDL2]
+  #Add: [-I/Users/sangshin/.brew/opt/sdl2/include/SDL2 -L/Users/sangshin/.brew/opt/sdl2/lib -lSDL2 -lSDL2main]
+
