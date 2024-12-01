@@ -26,10 +26,12 @@ void Chip8::LoadROM(char const* filename)
 	}
 }
 
+#include <iostream>
 void Chip8::Cycle()
 {
 	opcode = (memory[pc] << 8u) | memory[pc + 1];
 	pc += 2;
+	std::cout << std::hex << opcode << std::endl;
 	((*this).*(table[(opcode & 0xF000u) >> 12u]))();
 
 	if (delayTimer > 0) --delayTimer;
@@ -37,16 +39,16 @@ void Chip8::Cycle()
 }
 
 Chip8::Chip8() :
-	randGen(std::chrono::system_clock::now().time_since_epoch().count())
+	randGen(std::chrono::system_clock::now().time_since_epoch().count()),
+	randByte(0, 255U)
 {
-	// Initialize PC
 	pc = START_ADDRESS;
 
 	for (unsigned int i = 0; i < FONTSET_SIZE; ++i)
 	{
 		memory[FONTSET_START_ADDRESS + i] = fontset[i];
 	}
-	randByte = std::uniform_int_distribution<uint8_t>(0, 255U);
+	// randByte = std::uniform_int_distribution<uint8_t>(0, 255U);
 
 	table[0x0] = &Chip8::Table0;
 	table[0x1] = &Chip8::OP_1nnn;
