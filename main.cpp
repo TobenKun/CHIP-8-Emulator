@@ -26,6 +26,8 @@ int main(int ac, char** av)
 	auto lastCycleTime = std::chrono::high_resolution_clock::now();
 	bool quit = false;
 
+	chip8.debugMode = false;
+
 	while (!quit)
 	{
 		quit = platform.ProcessInput(chip8.keypad);
@@ -36,13 +38,19 @@ int main(int ac, char** av)
 				currentTime - lastCycleTime)
 				.count();
 
-		if (dt > cycleDelay)
+		if (chip8.debugMode == false &&
+			dt > cycleDelay /* && chip8.keypad[16] */)
 		{
 			lastCycleTime = currentTime;
 
 			chip8.Cycle();
 
 			platform.Update(chip8.video, videoPitch);
+		}
+		if (chip8.debugMode == true && chip8.keypad[16])
+		{
+			chip8.Cycle();
+			platform.Update((chip8.video), videoPitch);
 		}
 	}
 

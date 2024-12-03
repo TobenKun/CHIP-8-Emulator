@@ -31,11 +31,12 @@ void Chip8::Cycle()
 {
 	opcode = (memory[pc] << 8u) | memory[pc + 1];
 	pc += 2;
-	std::cout << std::hex << opcode << std::endl;
+	std::cout << std::hex << opcode;
 	((*this).*(table[(opcode & 0xF000u) >> 12u]))();
 
 	if (delayTimer > 0) --delayTimer;
 	if (soundTimer > 0) --soundTimer;
+	keypad[16] = 0;
 }
 
 Chip8::Chip8() :

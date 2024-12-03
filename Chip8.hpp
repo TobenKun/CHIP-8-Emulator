@@ -40,9 +40,12 @@ class Chip8
 	uint8_t	 sp{};
 	uint8_t	 delayTimer{};
 	uint8_t	 soundTimer{};
-	uint8_t	 keypad[16]{};
+	uint8_t	 keypad[17]{};	// last one for debug
 	uint32_t video[64 * 32]{};
 	uint16_t opcode{};
+
+	// for debug
+	bool debugMode;
 
 	// member funcs
 	Chip8();

@@ -151,6 +151,12 @@ bool Platform::ProcessInput(uint8_t* keys)
 						keys[0xF] = 1;
 					}
 					break;
+
+					case SDLK_n:  // for debug
+					{
+						keys[16] = 1;
+					}
+					break;
 				}
 			}
 			break;

@@ -1,18 +1,26 @@
 #include <cstdint>
+#include <iostream>
 #include "Chip8.hpp"
 
-void Chip8::OP_00E0() { memset(video, 0, sizeof(video)); }
+void Chip8::OP_00E0()
+{
+	memset(video, 0, sizeof(video));
+	if (debugMode) std::cout << ": Clears the screen" << std::endl;
+}
 
 void Chip8::OP_00EE()
 {
 	sp--;
 	pc = stack[sp];
+	if (debugMode) std::cout << ": Returns from a subroutine" << std::endl;
 }
 
 void Chip8::OP_1nnn()
 {
 	uint16_t address = opcode & 0xFFFu;
 	pc = address;
+	if (debugMode)
+		std::cout << ": Jumps to address " << std::hex << address << std::endl;
 }
 
 void Chip8::OP_2nnn()
@@ -22,6 +30,9 @@ void Chip8::OP_2nnn()
 	stack[sp] = pc;
 	sp++;
 	pc = address;
+	if (debugMode)
+		std::cout << ": Calls subroutine at " << std::hex << address
+				  << std::endl;
 }
 
 void Chip8::OP_3xkk()
@@ -29,7 +40,13 @@ void Chip8::OP_3xkk()
 	uint8_t Vx = (opcode & 0xF00u) >> 0x8u;
 	uint8_t byte = opcode & 0xFFu;
 
-	if (registers[Vx] == byte) pc += 2;
+	if (registers[Vx] == byte)
+	{
+		pc += 2;
+		if (debugMode) std::cout << ": Skip the next instruction" << std::endl;
+	}
+	else if (debugMode)
+		std::cout << ": not skipped" << std::endl;
 }
 
 void Chip8::OP_4xkk()
@@ -37,7 +54,13 @@ void Chip8::OP_4xkk()
 	uint8_t Vx = (opcode & 0xF00u) >> 0x8u;
 	uint8_t byte = opcode & 0xFFu;
 
-	if (registers[Vx] != byte) pc += 2;
+	if (registers[Vx] != byte)
+	{
+		pc += 2;
+		if (debugMode) std::cout << ": Skip the next instruction" << std::endl;
+	}
+	else if (debugMode)
+		std::cout << ": not skipped" << std::endl;
 }
 
 void Chip8::OP_5xy0()
@@ -45,7 +68,13 @@ void Chip8::OP_5xy0()
 	uint8_t Vx = (opcode & 0xF00u) >> 0x8u;
 	uint8_t Vy = (opcode & 0xF0u) >> 0x4u;
 
-	if (registers[Vx] == registers[Vy]) pc += 2;
+	if (registers[Vx] == registers[Vy])
+	{
+		pc += 2;
+		if (debugMode) std::cout << ": Skip the next instruction" << std::endl;
+	}
+	else if (debugMode)
+		std::cout << ": not skipped" << std::endl;
 }
 
 void Chip8::OP_6xkk()
@@ -54,6 +83,9 @@ void Chip8::OP_6xkk()
 	uint8_t byte = opcode & 0xFFu;
 
 	registers[Vx] = byte;
+	if (debugMode)
+		std::cout << ": Set register[" << std::hex << Vx << "] to " << std::hex
+				  << byte << std::endl;
 }
 
 void Chip8::OP_7xkk()
@@ -62,6 +94,9 @@ void Chip8::OP_7xkk()
 	uint8_t byte = opcode & 0xFFu;
 
 	registers[Vx] += byte;
+	if (debugMode)
+		std::cout << "Adds " << std::hex << byte << " to register[" << std::hex
+				  << Vx << "]" << std::endl;
 }
 
 void Chip8::OP_8xy0()
@@ -70,6 +105,9 @@ void Chip8::OP_8xy0()
 	uint8_t Vy = (opcode & 0xF0u) >> 0x4u;
 
 	registers[Vx] = registers[Vy];
+	if (debugMode)
+		std::cout << ": Set register[" << std::hex << Vx << "] to " << std::hex
+				  << registers[Vy] << std::endl;
 }
 
 void Chip8::OP_8xy1()
@@ -340,6 +378,6 @@ void Chip8::OP_Fx65()
 
 	for (uint8_t i = 0; i <= Vx; i++)
 	{
-		registers[i] = memory[index + i];
+		if (index + i <= 0xFFFu) registers[i] = memory[index + i];
 	}
 }
