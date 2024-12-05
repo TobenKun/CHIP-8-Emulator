@@ -31,10 +31,11 @@ void Chip8::Cycle()
 {
 	opcode = (memory[pc] << 8u) | memory[pc + 1];
 	pc += 2;
-	std::cout << std::hex << opcode;
+	// std::cout << std::hex << opcode;
 	((*this).*(table[(opcode & 0xF000u) >> 12u]))();
 
 	if (delayTimer > 0) --delayTimer;
+	// std::cout << "delay timer: " << (int)delayTimer << std::endl;
 	if (soundTimer > 0) --soundTimer;
 	keypad[16] = 0;
 }
@@ -43,6 +44,8 @@ Chip8::Chip8() :
 	randGen(std::chrono::system_clock::now().time_since_epoch().count()),
 	randByte(0, 255U)
 {
+	memset(registers, 0, sizeof(registers));
+	delayTimer = 0;
 	pc = START_ADDRESS;
 
 	for (unsigned int i = 0; i < FONTSET_SIZE; ++i)
@@ -113,6 +116,6 @@ void Chip8::Table8() { ((*this).*(table8[opcode & 0xFu]))(); }
 
 void Chip8::TableE() { ((*this).*(tableE[opcode & 0xFu]))(); }
 
-void Chip8::TableF() { ((*this).*(tableE[opcode & 0xFFu]))(); }
+void Chip8::TableF() { ((*this).*(tableF[opcode & 0xFFu]))(); }
 
 void Chip8::OP_NULL() {}

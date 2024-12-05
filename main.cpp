@@ -47,10 +47,11 @@ int main(int ac, char** av)
 
 			platform.Update(chip8.video, videoPitch);
 		}
-		if (chip8.debugMode == true && chip8.keypad[16])
+		else if (chip8.debugMode == true && chip8.keypad[16])
 		{
 			chip8.Cycle();
 			platform.Update((chip8.video), videoPitch);
+			// chip8.printRegisters();
 		}
 	}
 

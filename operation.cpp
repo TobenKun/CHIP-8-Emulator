@@ -1,6 +1,9 @@
 #include <cstdint>
+#include <iomanip>
 #include <iostream>
 #include "Chip8.hpp"
+
+// TODO:: 키 다중입력 처리 필요할수도?
 
 void Chip8::OP_00E0()
 {
@@ -46,7 +49,11 @@ void Chip8::OP_3xkk()
 		if (debugMode) std::cout << ": Skip the next instruction" << std::endl;
 	}
 	else if (debugMode)
+	{
 		std::cout << ": not skipped" << std::endl;
+		std::cout << "register [" << std::hex << Vx << "]: " << std::hex
+				  << (int)registers[Vx] << std::endl;
+	}
 }
 
 void Chip8::OP_4xkk()
@@ -84,8 +91,9 @@ void Chip8::OP_6xkk()
 
 	registers[Vx] = byte;
 	if (debugMode)
-		std::cout << ": Set register[" << std::hex << Vx << "] to " << std::hex
-				  << byte << std::endl;
+		std::cout << ": Set register[" << std::hex << std::setw(4)
+				  << std::setfill('0') << Vx << "] to " << std::hex << byte
+				  << std::endl;
 }
 
 void Chip8::OP_7xkk()
@@ -272,6 +280,9 @@ void Chip8::OP_Fx07()
 	uint8_t Vx = (opcode & 0xF00u) >> 0x8u;
 
 	registers[Vx] = delayTimer;
+	if (debugMode)
+		std::cout << "after Fx07 registers[Vx]: " << std::hex
+				  << (int)registers[Vx] << std::endl;
 }
 
 void Chip8::OP_Fx0A()
