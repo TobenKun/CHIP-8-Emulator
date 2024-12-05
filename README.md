@@ -1,6 +1,14 @@
 # CHIP-8-Emulator
 간단한 에뮬레이터 만들어보기
 
+## 요구사항
+intel mac - 다른 os에서 테스트 해보지 않았으나, sdl특성상 될 수도 있음
+SDL2      - 그래픽 라이브러리
+
+``` bash
+brew install SDL2
+```
+로 설치가능
 
 ## 사용방법
 git clone후에 Makefile 내부의 cflags의 sdl 디렉토리를 수정 후
