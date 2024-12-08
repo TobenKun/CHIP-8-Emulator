@@ -257,6 +257,7 @@ void Chip8::OP_Dxyn()
 			}
 		}
 	}
+	drawFlag = true;
 }
 
 void Chip8::OP_Ex9E()

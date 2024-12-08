@@ -34,18 +34,22 @@ int main(int ac, char** av)
 
 		auto  currentTime = std::chrono::high_resolution_clock::now();
 		float dt =
-			std::chrono::duration<float, std::chrono::microseconds::period>(
+			std::chrono::duration<float, std::chrono::milliseconds::period>(
 				currentTime - lastCycleTime)
 				.count();
 
-		if (chip8.debugMode == false &&
-			dt > cycleDelay /* && chip8.keypad[16] */)
+		if (!chip8.debugMode &&
+			dt > cycleDelay)
 		{
 			lastCycleTime = currentTime;
 
 			chip8.Cycle();
 
-			platform.Update(chip8.video, videoPitch);
+			if (chip8.drawFlag)
+			{
+				platform.Update(chip8.video, videoPitch);
+				chip8.drawFlag = false;
+			}
 		}
 		else if (chip8.debugMode == true && chip8.keypad[16])
 		{

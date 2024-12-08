@@ -2,11 +2,12 @@ SHELL = /bin/bash
 idx = 0
 sp = /-\|/
 CC = c++
-CFLAGS = -I/Users/sangshin/.brew/opt/sdl2/include/SDL2 -L/Users/sangshin/.brew/opt/sdl2/lib -lSDL2 -lSDL2main -std=c++11
+SDL2_PREFIX ?= $(shell brew --prefix sdl2)
+CFLAGS = -I$(SDL2_PREFIX)/include/SDL2 -std=c++11
+LDFLAGS = -L$(SDL2_PREFIX)/lib -lSDL2 -lSDL2main
 NAME = chip8
 
 SOURCES = main.cpp Chip8.cpp Platform.cpp operation.cpp
-		
 
 OBJECTS = $(SOURCES:.cpp=.o)
 
@@ -15,10 +16,9 @@ all : .make_mandatory
 $(NAME) : .make_mandatory
 
 .make_mandatory : $(OBJECTS)
-	@$(CC) $(CFLAGS) $^ -o $(NAME)
+	@$(CC) $(OBJECTS) $(LDFLAGS) -o $(NAME)
 	@touch $@
 	@printf "\b\b\b\b\b\b\b\b\b\b\b\b\bDone!               \n"
-
 
 %.o : %.cpp
 	$(eval idx = $(shell expr $(idx) + 1))
