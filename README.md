@@ -1,6 +1,9 @@
 # CHIP-8-Emulator
 간단한 에뮬레이터 만들어보기
 
+<img width="642" alt="Screen Shot 2025-03-16 at 4 32 20 AM" src="https://github.com/user-attachments/assets/b77ddb80-113e-4f98-81af-0454f88c0c9a" />
+
+
 ## 요구사항
 SDL2      - 그래픽 라이브러리
 
